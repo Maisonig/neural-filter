@@ -135,8 +135,8 @@ def load_datasets(path: str):
     :return: Список со словарями датасетов
     """
     datasets = []
-    for path in os.listdir(path):
-        if path.endswith('.pt'):
-            datasets.append(load_xy_from_pt(path))
+    for p in os.listdir(path):
+        if p.endswith('.pt'):
+            datasets.append(load_xy_from_pt(os.path.join(path, p)))
     return datasets
 
