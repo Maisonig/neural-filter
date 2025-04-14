@@ -6,6 +6,7 @@ from net import *
 from test import *
 from prepare import *
 from graphics import *
+from torchinfo import summary
 from torch.utils.data import DataLoader
 
 
@@ -16,7 +17,7 @@ class Config:
     output_size = 1  # Размерность выходных данных
 
     batch_size = 64
-    num_epochs = 2
+    num_epochs = 10
     learning_rate = 0.001
 
 
@@ -75,20 +76,23 @@ def train_model(model, train_loader, val_loader, test_loader):
 
 
 def main():
-    datasets = load_datasets('../datasets')
-    train_dataset, val_dataset, test_dataset = create_dataset(datasets, sequence_length=5000, train_part=0.7, val_part=0.2)
+    datasets = load_datasets('../')
+    train_dataset, val_dataset, test_dataset = create_dataset(datasets, sequence_length=2000, train_part=0.7, val_part=0.2)
 
     train_loader = DataLoader(train_dataset, batch_size=Config.batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=Config.batch_size)
     test_loader = DataLoader(test_dataset, batch_size=Config.batch_size)
 
     model = DenoisingLSTM(Config)
+    summary(model, input_size=(Config.batch_size, Config.input_size))
 
     train_loss, val_loss, metrics = train_model(model, train_loader, val_loader, test_loader)
 
     plot_losses(train_loss)
     plot_losses(val_loss, 'val')
 
+    plot_sample(model, test_dataset.tensors[0], test_dataset.tensors[1], random.randint(0, len(test_dataset)))
+    plot_sample(model, test_dataset.tensors[0], test_dataset.tensors[1], random.randint(0, len(test_dataset)))
     plot_sample(model, test_dataset.tensors[0], test_dataset.tensors[1], random.randint(0, len(test_dataset)))
     plot_sample(model, test_dataset.tensors[0], test_dataset.tensors[1], random.randint(0, len(test_dataset)))
     plot_sample(model, test_dataset.tensors[0], test_dataset.tensors[1], random.randint(0, len(test_dataset)))

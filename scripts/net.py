@@ -1,4 +1,4 @@
-from torch import nn, round, max
+from torch import nn
 
 
 class DenoisingLSTM(nn.Module):

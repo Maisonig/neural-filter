@@ -5,7 +5,6 @@ from numpy import arange
 from sklearn.metrics import precision_score, recall_score, f1_score
 
 
-
 # model = DenoisingLSTM(Config)
 # model.load_state_dict(torch.load('../best_model.pth', weights_only=True))
 # model.eval()
@@ -30,8 +29,8 @@ def plot_sample(model, test_x, test_y, sample_num=0):
     time = arange(0, len(test_x))
     plt.title(f'Графики {sample_num} сэмпла тестовой выборки')
     plt.plot(time, test_x, label='Шумные данные (X)', alpha=1, linewidth=1)
-    plt.plot(time, test_y, label='Целевая модель (y)', alpha=1, linewidth=1.5)
-    plt.plot(time, test_pred, label='Отфильтрованная модель (pred)', alpha=1, linewidth=1.5)
+    plt.plot(time, test_y, label='Целевая данные (y)', alpha=1, linewidth=1.5)
+    plt.plot(time, test_pred, label='Очищенные данные (pred)', alpha=1, linewidth=1.5)
     plt.xlabel('time', fontsize=14)
     plt.ylabel('signal', fontsize=14)
     plt.legend(loc='upper right', prop={'size': 14})
@@ -45,7 +44,7 @@ def denoise_signal(model, input_signal):
     :param model: Предобученная модель
     :param input_signal: Сэмпл для фильтраци (Тензор)
 
-    :return:
+    :return: Отфильтрованный нейронной сетью сигнал
     """
     input_tensor = input_signal.unsqueeze(0).unsqueeze(-1)
 
@@ -57,6 +56,14 @@ def denoise_signal(model, input_signal):
 
 
 def calculate_metrics(model, test_loader):
+    """
+        Рассчитывает метрики precision, recall, f1
+
+    :param model: Предобученная модель
+    :param test_loader: DataLoader тестовой выборки
+
+    :return: precision, recall, f1
+    """
     model.eval()
     all_preds, all_targets = [], []
 

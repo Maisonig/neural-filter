@@ -111,6 +111,10 @@ def create_dataset(datasets: list[dict],
     print(f"\tЧисло сэмплов валидационной выборки: {val_num}")
     print(f"\tЧисло сэмплов тестовой выборки: {sequences_num - train_num - val_num}")
 
+    idxs = torch.randperm(sequences_num)
+    xs = xs[idxs]
+    ys = ys[idxs]
+
     train_xs = xs[:train_num, :]
     val_xs = xs[train_num:train_num + val_num, :]
     test_xs = xs[train_num + val_num:, :]
